@@ -7,7 +7,7 @@ public class InputHelper
             string input = "";
             while (string.IsNullOrWhiteSpace(input))
             {
-                  Console.WriteLine(prompt);
+                  Console.Write(prompt);
                   input = Console.ReadLine();
                   if (string.IsNullOrWhiteSpace(input))
                   {

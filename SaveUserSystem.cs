@@ -17,6 +17,10 @@ public class SaveUserSystem
       public List<IUser> LoadUser() // void doesnt return anny value
       {
             List<IUser> users = new List<IUser>();
+            if (!File.Exists("users.txt")) // i load, finns det ingen users.txt, return users
+            {
+                  return users;
+            }
             string[] lines = File.ReadAllLines("users.txt");
             foreach (string line in lines)
             {
