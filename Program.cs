@@ -24,7 +24,7 @@ while (running)
                         case MainMenu.Login:
                               Console.WriteLine("===== Login =====");
                               string login_username = helper.ReadRequired("Username: ");
-                              string login_password = helper.ReadRequired("Username: ");
+                              string login_password = helper.ReadRequired("Password: ");
                               foreach (Account acc in users)
                               {
                                     if (acc.Username == login_username && acc._password == login_password)
@@ -100,7 +100,7 @@ while (running)
 }
 
 // A user needs to be able to register an account DONE
-// A user needs to be able to log out. 
+// A user needs to be able to log out. DONE
 // A user needs to be able to log in. DONE
 
 // A user needs to be able to upload information about the item they wish to trade.
