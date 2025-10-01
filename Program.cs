@@ -1,2 +1,7 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using App;
+
+List<IUser> user = new List<IUser>();
+
+IUser active_user = null;
+
+
