@@ -32,11 +32,12 @@ while (running)
                                     if (acc.Username == login_username && acc._password == login_password)
                                     {
                                           active_user = acc;
+                                          Console.WriteLine("Signing in...");
                                           break;
                                     }
                                     else
                                     {
-                                          Console.WriteLine("User not found...");
+                                          Console.WriteLine("User not found..."); //bugg when logging in
                                     }
                               }
                               break;
@@ -97,13 +98,23 @@ while (running)
                               break;
                         case LoggedInMenu.Browse:
                               Console.WriteLine("===== Browse Other Users Items =====");
-                              foreach (Item i in items)
+                              if (items.Count == 0)
                               {
-                                    if (i.OwnerUsername != ((Account)active_user).Username)
+                                    Console.WriteLine("no items listed");
+                              }
+                              else
+                              {
+                                    int index = 1;
+                                    foreach (Item i in items)
                                     {
-                                          Console.WriteLine($"Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
+                                          if (i.OwnerUsername != ((Account)active_user).Username)
+                                          {
+                                                Console.WriteLine($"[{index}] Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
+                                                index++;
+                                          }
                                     }
                               }
+                              
                               break;
                         case LoggedInMenu.Logout:
                               active_user = null;
@@ -116,21 +127,30 @@ while (running)
       }
 }
 
+// TODO
+// Bool tradeble.. eller annat 
+// requst
+//
+//
+//
+
 // A user needs to be able to register an account DONE
 // A user needs to be able to log out. DONE
 // A user needs to be able to log in. DONE
 
-// A user needs to be able to upload information about the item they wish to trade.
-// A user needs to be able to browse a list of other users items.
+// A user needs to be able to upload information about the item they wish to trade. DONE
+// A user needs to be able to browse a list of other users items. DONE
+
 // A user needs to be able to request a trade for other users items.
 // A user needs to be able to browse trade requests.
 // A user needs to be able to accept a trade request.
 // A user needs to be able to deny a trade request.
 // A user needs to be able to browse completed requests.
+
 // Additional Mandatory Features
 // In addition to the original features, we now need an automatic save and load system described by the following features:
 
-// The program needs to save relevant data to the computers file system whenever a state change is made.
-// The program needs to be able to start and then automatically load all relevant data so it can function as if it was never closed.
+// The program needs to save relevant data to the computers file system whenever a state change is made. DONE
+// The program needs to be able to start and then automatically load all relevant data so it can function as if it was never closed. DONE
 
 

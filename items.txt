@@ -1,1 +1,3 @@
 max,TV,Samsunge
+hasse,Bike,Yamaha
+hasse,Computer,MSI modern 14
