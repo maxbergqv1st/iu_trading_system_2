@@ -2,7 +2,7 @@ namespace App;
 
 public class SaveUserSystem
 {
-      public void SaveUser(List<IUser> users)
+      public void SaveUser(List<IUser> users) // retunerar inte ett värde
       {
             // string[] lines = new string[users.Count];
             List<string> lines = new List<string>();
@@ -12,7 +12,7 @@ public class SaveUserSystem
             }
             File.WriteAllLines("users.txt", lines);
       }
-      public List<IUser> LoadUser() // void doesnt return anny value
+      public List<IUser> LoadUser() // returnerar ett värde.
       {
             List<IUser> users = new List<IUser>();
             if (!File.Exists("users.txt")) // i load, finns det ingen users.txt, return users
