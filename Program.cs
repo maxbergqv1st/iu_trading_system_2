@@ -4,7 +4,7 @@ SaveUserSystem save_user_system = new SaveUserSystem();
 
 List<IUser> users = save_user_system.LoadUser();
 
-IUser active_user = null;
+IUser? active_user = null;
 bool running = true;
 
 InputHelper helper = new InputHelper();
@@ -15,7 +15,7 @@ while (running)
       {
             Console.Clear();
             Console.WriteLine("[1] login\n[2] register\n[3] quit\nChoose a index to move around [X]");
-            string input = Console.ReadLine();
+            string? input = Console.ReadLine();
             if (int.TryParse(input, out int choice))
             {
                   Console.Clear();
@@ -76,14 +76,33 @@ while (running)
       }
       else
       {
-            Console.WriteLine("Logged in");
-            Console.ReadLine();
+            Console.Clear();
+            Console.WriteLine("===== Logged in =====");
+            Console.WriteLine("\n[1] Upload\n[5] Logout");
+            string input = Console.ReadLine();
+            if (int.TryParse(input, out int choice))
+            {
+                  Console.Clear();
+                  switch ((LoggedInMenu)choice)
+                  {
+                        case LoggedInMenu.Upload:
+                              Console.WriteLine("===== Upload =====");
+                              break;
+                        case LoggedInMenu.Logout:
+                              active_user = null;
+                              Console.WriteLine("logging out...");
+                              break;
+                  }
+                  Console.ReadLine();
+            }
+            
       }
 }
 
 // A user needs to be able to register an account DONE
-// A user needs to be able to log out.
-// A user needs to be able to log in.
+// A user needs to be able to log out. 
+// A user needs to be able to log in. DONE
+
 // A user needs to be able to upload information about the item they wish to trade.
 // A user needs to be able to browse a list of other users items.
 // A user needs to be able to request a trade for other users items.
