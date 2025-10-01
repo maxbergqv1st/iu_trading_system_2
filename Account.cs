@@ -5,7 +5,7 @@ class Account : IUser
       public string Name;
       public string Username;
 
-      string _password;
+      public string _password;
 
       public Account(string name, string username, string password)
       {
