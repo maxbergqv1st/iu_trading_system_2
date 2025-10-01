@@ -6,6 +6,8 @@ IUser active_user = null;
 
 bool running = true;
 
+InputHelper helper = new InputHelper();
+
 while (running)
 {
       if (active_user == null)
