@@ -11,6 +11,7 @@ public class InputHelper
                   input = Console.ReadLine();
                   if (string.IsNullOrWhiteSpace(input))
                   {
+                        Console.Clear();
                         Console.WriteLine("Unvalid input...");
                   }
             }

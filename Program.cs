@@ -13,7 +13,29 @@ while (running)
       if (active_user == null)
       {
             Console.Clear();
-            Console.WriteLine("login\nregister\nquit");
+            Console.WriteLine("[1] login\n[2] register\n[3] quit\nChoose a index to move around [X]");
+            string input = Console.ReadLine();
+            if (int.TryParse(input, out int choice))
+            {
+                  Console.Clear();
+                  switch ((MainMenu)choice)
+                  {
+                        case MainMenu.Login:
+                              Console.WriteLine("===== Logged in =====");
+                              break;
+                        case MainMenu.Register:
+                              Console.WriteLine("===== Register =====");
+                              break;
+                        case MainMenu.Quit:
+                              Console.WriteLine("===== Quiting =====");
+                              running = false;
+                              break;
+                        default:
+                              Console.WriteLine("Unvalid choice...");
+                              break;
+                  }
+                  Console.ReadLine();
+            }
       }
       else
       {
