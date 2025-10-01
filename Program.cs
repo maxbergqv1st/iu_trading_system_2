@@ -22,7 +22,21 @@ while (running)
                   switch ((MainMenu)choice)
                   {
                         case MainMenu.Login:
-                              Console.WriteLine("===== Logged in =====");
+                              Console.WriteLine("===== Login =====");
+                              string login_username = helper.ReadRequired("Username: ");
+                              string login_password = helper.ReadRequired("Username: ");
+                              foreach (Account acc in users)
+                              {
+                                    if (acc.Username == login_username && acc._password == login_password)
+                                    {
+                                          active_user = acc;
+                                          break;
+                                    }
+                                    else
+                                    {
+                                          Console.WriteLine("User not found...");
+                                    }
+                              }
                               break;
                         case MainMenu.Register:
                               Console.WriteLine("===== Register =====");
@@ -63,7 +77,24 @@ while (running)
       else
       {
             Console.WriteLine("Logged in");
+            Console.ReadLine();
       }
 }
+
+// A user needs to be able to register an account DONE
+// A user needs to be able to log out.
+// A user needs to be able to log in.
+// A user needs to be able to upload information about the item they wish to trade.
+// A user needs to be able to browse a list of other users items.
+// A user needs to be able to request a trade for other users items.
+// A user needs to be able to browse trade requests.
+// A user needs to be able to accept a trade request.
+// A user needs to be able to deny a trade request.
+// A user needs to be able to browse completed requests.
+// Additional Mandatory Features
+// In addition to the original features, we now need an automatic save and load system described by the following features:
+
+// The program needs to save relevant data to the computers file system whenever a state change is made.
+// The program needs to be able to start and then automatically load all relevant data so it can function as if it was never closed.
 
 
