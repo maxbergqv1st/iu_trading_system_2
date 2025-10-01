@@ -97,6 +97,13 @@ while (running)
                               break;
                         case LoggedInMenu.Browse:
                               Console.WriteLine("===== Browse Other Users Items =====");
+                              foreach (Item i in items)
+                              {
+                                    if (i.OwnerUsername != ((Account)active_user).Username)
+                                    {
+                                          Console.WriteLine($"Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
+                                    }
+                              }
                               break;
                         case LoggedInMenu.Logout:
                               active_user = null;
