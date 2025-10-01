@@ -10,5 +10,6 @@ public enum MainMenu
 public enum LoggedInMenu
 {
       Upload = 1,
-      Logout = 5,
+      Browse = 2,
+      Logout = 5
 }

@@ -1,8 +1,10 @@
 ﻿using App;
 
 SaveUserSystem save_user_system = new SaveUserSystem();
-
 List<IUser> users = save_user_system.LoadUser();
+
+SaveItemSystem save_item_system = new SaveItemSystem();
+List<Item> items = save_item_system.LoadItems();
 
 IUser? active_user = null;
 bool running = true;
@@ -78,7 +80,7 @@ while (running)
       {
             Console.Clear();
             Console.WriteLine("===== Logged in =====");
-            Console.WriteLine("\n[1] Upload\n[5] Logout");
+            Console.WriteLine("[1] Upload\n[2] Browse\n[5] Logout");
             string input = Console.ReadLine();
             if (int.TryParse(input, out int choice))
             {
@@ -87,6 +89,14 @@ while (running)
                   {
                         case LoggedInMenu.Upload:
                               Console.WriteLine("===== Upload =====");
+                              string item_name = helper.ReadRequired("Item name: ");
+                              string item_description = helper.ReadRequired("Item description: ");
+                              items.Add(new Item(((Account)active_user).Username, item_name, item_description));
+                              save_item_system.SaveItem(items);
+                              Console.WriteLine("Item uploaded and saved!");
+                              break;
+                        case LoggedInMenu.Browse:
+                              Console.WriteLine("===== Browse Other Users Items =====");
                               break;
                         case LoggedInMenu.Logout:
                               active_user = null;
