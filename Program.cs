@@ -292,9 +292,9 @@ while (running)
 }
 
 // TODO
-// bugg i login
-// bool till tradable kanske. 
-// 
+// SÄTT ETT KRAV PÅ ATT ITEMS MÅSTE FINNAS ANNARS INVALID OPTION
+// KOMMENTERA KODEN
+// READ.ME
 //
 //
 
