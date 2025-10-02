@@ -121,6 +121,23 @@ while (running)
                               break;
                         case LoggedInMenu.TradeRequest:
                               Console.WriteLine("===== Create Trade Request =====");
+                              if (items.Count == 0)
+                              {
+                                    Console.WriteLine("no items listed");
+                              }
+                              else
+                              {
+                                    int index = 1;
+                                    foreach (Item i in items)
+                                    {
+                                          if (i.OwnerUsername != ((Account)active_user).Username)
+                                          {
+                                                Console.WriteLine($"[{index}] Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
+                                                index++;
+                                          }
+                                    }
+                              }
+                              //ovanf;r 'r tradebrowse igen
                               string receiver = helper.ReadRequired("Enter the username of the user you wanna trade with: ");
 
                               string name_of_item = helper.ReadRequired("Enter the name of the item you want to trade: ");
@@ -201,7 +218,7 @@ while (running)
                               {
                                     if (t.Sender == ((Account)active_user).Username || t.Receiver == ((Account)active_user).Username)
                                     {
-                                          Console.WriteLine($"Sender: {t.Sender}, Receiver: {t.Receiver}, Items: {string.Join(", ", t.SenderItems)}, Status: {t.Status}");
+                                    Console.WriteLine($"Sender: {t.Sender} | Offered: [{string.Join(", ", t.SenderItems)}]  <---> Receiver: {t.Receiver} | Offered: {string.Join(", ", t.ReceiverItems)}, Status: {t.Status}");
                                     }
                               }
                               break;

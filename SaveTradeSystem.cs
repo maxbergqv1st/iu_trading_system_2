@@ -9,7 +9,7 @@ public class SaveTradeSystem
             {
                   string senderItems = string.Join("|", t.SenderItems);
                   string reciverItems = string.Join("|", t.ReceiverItems);
-                  lines.Add($"{t.Sender},{t.Receiver},{senderItems},{reciverItems} ,{t.Status}");
+                  lines.Add($"{t.Sender},{t.Receiver},{senderItems},{reciverItems},{t.Status}");
             }
             File.WriteAllLines("trades.txt", lines);
       }
@@ -24,13 +24,13 @@ public class SaveTradeSystem
             foreach (string line in lines)
             {
                   string[] split = line.Split(",");
-                  if (split.Length == 4)
+                  if (split.Length == 5)
                   {
                         string sender = split[0];
                         string receiver = split[1];
                         List<string> senderItems = new List<string>(split[2].Split("|"));
                         List<string> reciverItems = new List<string>(split[3].Split("|"));
-                        TradeStatus status = (TradeStatus)Enum.Parse(typeof(TradeStatus), split[3]);
+                        TradeStatus status = (TradeStatus)Enum.Parse(typeof(TradeStatus), split[4]);
 
                         trades.Add(new Trade(sender, receiver, senderItems, reciverItems) { Status = status });
                   }
