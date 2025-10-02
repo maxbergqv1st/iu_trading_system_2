@@ -30,18 +30,20 @@ while (running)
                               Console.WriteLine("===== Login =====");
                               string login_username = helper.ReadRequired("Username: ");
                               string login_password = helper.ReadRequired("Password: ");
+                              bool found = false;
                               foreach (Account acc in users)
                               {
                                     if (acc.Username == login_username && acc._password == login_password)
                                     {
                                           active_user = acc;
                                           Console.WriteLine("Signing in...");
+                                          found = true;
                                           break;
                                     }
-                                    else
-                                    {
-                                          Console.WriteLine("User not found..."); //bugg when logging in
-                                    }
+                              }
+                              if (!found)
+                              {
+                                    Console.WriteLine("User not found...");
                               }
                               break;
                         case MainMenu.Register:
