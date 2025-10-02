@@ -152,7 +152,8 @@ while (running)
                                     }
                               }
                               //READ IN OFFER START
-                              string offered_item_input = helper.ReadRequired("Enter the name of the item [YOU] wanna offer: ");
+                              Console.WriteLine("Enter the name of the item [YOU] wanna offer: ");
+                              string offered_item_input = Console.ReadLine() ?? "";
                               List<string> offered_items = new List<string>();
                               if (!string.IsNullOrWhiteSpace(offered_item_input))
                               {
@@ -178,7 +179,8 @@ while (running)
                               }
                               //SHOW OTHER USERS ITEMS END
                               //READ IN ITEMS WANTED START
-                              string wanted_item_input = helper.ReadRequired("Enter the item name(s) you want for [USER], Separate with comma (,) or leave empty if none: ");
+                              Console.WriteLine("Enter the item name(s) you want for [USER], Separate with comma (,) or leave empty if none: ");
+                              string wanted_item_input = Console.ReadLine() ?? "";
                               List<string> wanted_items = new List<string>();
                               if (!string.IsNullOrWhiteSpace(wanted_item_input))
                               {
