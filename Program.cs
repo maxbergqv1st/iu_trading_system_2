@@ -143,6 +143,23 @@ while (running)
                               string name_of_item = helper.ReadRequired("Enter the name of the item you want to trade: ");
                               List<string> offered_item = new List<string>();
                               offered_item.Add(name_of_item);
+                              // s'ler gemom egna upload items
+                              if (items.Count == 0)
+                              {
+                                    Console.WriteLine("no items listed");
+                              }
+                              else
+                              {
+                                    int index = 1;
+                                    foreach (Item i in items)
+                                    {
+                                          if (i.OwnerUsername == ((Account)active_user).Username)
+                                          {
+                                                Console.WriteLine($"[{index}] Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
+                                                index++;
+                                          }
+                                    }
+                              }
 
                               string wanted_item = helper.ReadRequired("Enter the name of the item you want from the other user: ");
                               List<string> offer_wanted_items = new List<string>();
@@ -213,14 +230,22 @@ while (running)
                               
                               break;
                         case LoggedInMenu.TradeHistory:
-                              Console.WriteLine("===== trading history =====");
+                              Console.WriteLine("===== Trading History =====");
                               foreach (Trade t in trades)
                               {
-                                    if (t.Sender == ((Account)active_user).Username || t.Receiver == ((Account)active_user).Username)
+                                    if ((t.Sender == ((Account)active_user).Username || t.Receiver == ((Account)active_user).Username) && t.Status != TradeStatus.Pending) //lägger prio ett i en (då de får högre prio) annars går && har högre prio ||. 
                                     {
                                     Console.WriteLine($"Sender: {t.Sender} | Offered: [{string.Join(", ", t.SenderItems)}]  <---> Receiver: {t.Receiver} | Offered: {string.Join(", ", t.ReceiverItems)}, Status: {t.Status}");
                                     }
                               }
+                              Console.WriteLine("===== Pending Trades =====");
+                              foreach (Trade t in trades)
+                                    {
+                                          if ((t.Sender == ((Account)active_user).Username || t.Receiver == ((Account)active_user).Username) && t.Status == TradeStatus.Pending) //lägger prio ett i en (då de får högre prio) annars går && har högre prio ||. 
+                                          {
+                                                Console.WriteLine($"Sender: {t.Sender} | Offered: [{string.Join(", ", t.SenderItems)}]  <---> Receiver: {t.Receiver} | Offered: {string.Join(", ", t.ReceiverItems)}, Status: {t.Status}");
+                                          }
+                                    }
                               break;
                         case LoggedInMenu.Logout:
                               active_user = null;
@@ -234,9 +259,9 @@ while (running)
 }
 
 // TODO
-// Bool tradeble.. eller annat  
-// requst
-//
+// bugg i login
+// bool till tradable kanske. 
+// 
 //
 //
 
@@ -247,11 +272,11 @@ while (running)
 // A user needs to be able to upload information about the item they wish to trade. DONE
 // A user needs to be able to browse a list of other users items. DONE
 
-// A user needs to be able to request a trade for other users items.
-// A user needs to be able to browse trade requests.
-// A user needs to be able to accept a trade request.
-// A user needs to be able to deny a trade request.
-// A user needs to be able to browse completed requests.
+// A user needs to be able to request a trade for other users items. DONE
+// A user needs to be able to browse trade requests. DONE
+// A user needs to be able to accept a trade request. DONE
+// A user needs to be able to deny a trade request. DONE
+// A user needs to be able to browse completed requests. DONE
 
 // Additional Mandatory Features
 // In addition to the original features, we now need an automatic save and load system described by the following features:
