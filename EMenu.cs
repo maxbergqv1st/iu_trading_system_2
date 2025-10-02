@@ -12,8 +12,9 @@ public enum LoggedInMenu
       Upload = 1,
       Browse = 2,
       TradeRequest = 3,
-      TradeHistory = 4,
-      Logout = 5
+      TradePending = 4,
+      TradeHistory = 5,
+      Logout = 6
 }
 
 public enum TradeStatus
