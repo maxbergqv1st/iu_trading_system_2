@@ -143,47 +143,64 @@ while (running)
                               string receiver = helper.ReadRequired("Enter the username of the user you wanna trade with: ");
                               Console.Clear();
                               Console.WriteLine("===== Create Trade Request =====");
+                              Console.WriteLine("Your items: ");
                               foreach (Item i in items)
                               {
                                     if (i.OwnerUsername == ((Account)active_user).Username)
                                     {
-                                          Console.WriteLine($" Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
+                                          Console.WriteLine($" - {i.Name}");
                                     }
                               }
-                              string name_of_item = helper.ReadRequired("Enter the name of the item [YOU] wanna offer: ");
-                              List<string> offered_item = new List<string>();
-                              offered_item.Add(name_of_item);
-                              // s'ler gemom egna upload items
-                              if (items.Count == 0)
+                              //READ IN OFFER START
+                              string offered_item_input = helper.ReadRequired("Enter the name of the item [YOU] wanna offer: ");
+                              List<string> offered_items = new List<string>();
+                              if (!string.IsNullOrWhiteSpace(offered_item_input))
                               {
-                                    Console.WriteLine("no items listed");
-                              }
-                              else
-                              {
-                                    int index = 1;
-                                    foreach (Item i in items)
+                                    string[] splits = offered_item_input.Split(",");
+                                    foreach (string split in splits)
                                     {
-                                          if (i.OwnerUsername != ((Account)active_user).Username)
+                                          string trimmed = split.Trim();
+                                          if (!string.IsNullOrEmpty(trimmed))
                                           {
-                                                Console.WriteLine($"[{index}] Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
-                                                index++;
+                                                offered_items.Add(trimmed);
                                           }
                                     }
                               }
-
-                              string wanted_item = helper.ReadRequired("Enter the name of the item you want from [USER]: ");
-                              List<string> offer_wanted_items = new List<string>();
-                              offer_wanted_items.Add(wanted_item);
-
-                              
-                              Trade new_trade = new Trade(((Account)active_user).Username, receiver, offered_item, offer_wanted_items);
+                              //READ IN OFFER END
+                              //SHOW OTHER USERS ITEMS START
+                              Console.WriteLine($"Items owned by {receiver}:");
+                              foreach (Item i in items)
+                              {
+                                    if (i.OwnerUsername == receiver)
+                                    {
+                                          Console.WriteLine($" - {i.Name}");
+                                    }
+                              }
+                              //SHOW OTHER USERS ITEMS END
+                              //READ IN ITEMS WANTED START
+                              string wanted_item_input = helper.ReadRequired("Enter the item name(s) you want for [USER], Separate with comma (,) or leave empty if none: ");
+                              List<string> wanted_items = new List<string>();
+                              if (!string.IsNullOrWhiteSpace(wanted_item_input))
+                              {
+                                    string[] splits = wanted_item_input.Split(",");
+                                    foreach (string split in splits)
+                                    {
+                                          string trimmed = split.Trim();
+                                          if (!string.IsNullOrEmpty(trimmed))
+                                          {
+                                                wanted_items.Add(trimmed);
+                                          }
+                                    }
+                              }
+                              //READ IN ITEMS WANTED END
+                              Trade new_trade = new Trade(((Account)active_user).Username, receiver, offered_items, wanted_items);
                               trades.Add(new_trade);
                               save_trade_system.SaveTrades(trades);
                               Console.WriteLine("Trade request created and saved!");
                               break;
                         case LoggedInMenu.TradePending:
                               Console.WriteLine("===== Pending Trade Requests =====");
-                              
+
                               List<Trade> pending_trades = new List<Trade>();
                               int index_of_item = 1;
                               foreach (Trade t in trades)
@@ -200,7 +217,9 @@ while (running)
                               if (int.TryParse(input_trade, out int trade_choice) && trade_choice > 0 && trade_choice <= pending_trades.Count)
                               {
                                     Trade chosen_trade = pending_trades[trade_choice - 1];
-                                    Console.WriteLine($"You selected trade from {chosen_trade.Sender}, Items: {string.Join(", ", chosen_trade.Sender)}");
+                                    Console.WriteLine($"You selected trade from {chosen_trade.Sender}");
+                                    Console.WriteLine($" Sender offers: {string.Join(", ", chosen_trade.SenderItems)}");
+                                    Console.WriteLine($" They offers: {string.Join(", ", chosen_trade.ReceiverItems)}");
                                     //adda senders offers och vad de vill ha av dig
                                     Console.WriteLine("[1] Accept  [2] Deny"); // kolla om helper.ReadReq funkar sen
                                     string input_decision = Console.ReadLine();
@@ -218,6 +237,7 @@ while (running)
                                                       }
                                                 }
                                           }
+
                                           foreach (string itemName in chosen_trade.ReceiverItems)
                                           {
                                                 foreach (Item i in items)
@@ -228,6 +248,7 @@ while (running)
                                                       }
                                                 }
                                           }
+                                          
                                           save_item_system.SaveItem(items);
                                     }
                                     else if (input_decision == "2")
@@ -237,7 +258,7 @@ while (running)
                                     }
                                     save_trade_system.SaveTrades(trades);
                               }
-                              
+
                               break;
                         case LoggedInMenu.TradeHistory:
                               Console.WriteLine("===== Trading History =====");

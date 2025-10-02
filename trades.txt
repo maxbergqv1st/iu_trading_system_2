@@ -1,2 +1,5 @@
 max,hasse,Snus,Computer,Accepted
 max,hasse,TV,Snus,Accepted
+max,1,1,2,Pending
+max,hasse,Snus|Computer,TV,Accepted
+max,hasse,TV,Snus|Computer,Accepted
