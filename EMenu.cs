@@ -15,3 +15,10 @@ public enum LoggedInMenu
       TradeHistory = 4,
       Logout = 5
 }
+
+public enum TradeStatus
+{
+      Pending,
+      Accepted,
+      Denied
+}
