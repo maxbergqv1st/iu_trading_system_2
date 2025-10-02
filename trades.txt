@@ -1,2 +1,2 @@
-max,hasse,Computer,Keyboard ,Accepted
-max,hasse,Computer,TV,Accepted
+max,hasse,Snus,Computer,Accepted
+max,hasse,TV,Snus,Accepted

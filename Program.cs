@@ -141,8 +141,16 @@ while (running)
                               }
                               //ovanf;r 'r tradebrowse igen
                               string receiver = helper.ReadRequired("Enter the username of the user you wanna trade with: ");
-
-                              string name_of_item = helper.ReadRequired("Enter the name of the item you want to trade: ");
+                              Console.Clear();
+                              Console.WriteLine("===== Create Trade Request =====");
+                              foreach (Item i in items)
+                              {
+                                    if (i.OwnerUsername == ((Account)active_user).Username)
+                                    {
+                                          Console.WriteLine($" Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
+                                    }
+                              }
+                              string name_of_item = helper.ReadRequired("Enter the name of the item [YOU] wanna offer: ");
                               List<string> offered_item = new List<string>();
                               offered_item.Add(name_of_item);
                               // s'ler gemom egna upload items
@@ -155,7 +163,7 @@ while (running)
                                     int index = 1;
                                     foreach (Item i in items)
                                     {
-                                          if (i.OwnerUsername == ((Account)active_user).Username)
+                                          if (i.OwnerUsername != ((Account)active_user).Username)
                                           {
                                                 Console.WriteLine($"[{index}] Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
                                                 index++;
@@ -163,7 +171,7 @@ while (running)
                                     }
                               }
 
-                              string wanted_item = helper.ReadRequired("Enter the name of the item you want from the other user: ");
+                              string wanted_item = helper.ReadRequired("Enter the name of the item you want from [USER]: ");
                               List<string> offer_wanted_items = new List<string>();
                               offer_wanted_items.Add(wanted_item);
 
