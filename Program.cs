@@ -141,7 +141,22 @@ while (running)
                               }
                               //ovanf;r 'r tradebrowse igen
                               string receiver = helper.ReadRequired("Enter the username of the user you wanna trade with: ");
-                              Console.Clear();
+                              bool ReceiverExists = false;
+                              foreach (Account acc in users)
+                              {
+                                    if (acc.Username == receiver)
+                                    {
+                                          ReceiverExists = true;
+                                          break;
+                                    }
+                              }
+                              if (!ReceiverExists)
+                              {
+                                    ReceiverExists = false;
+                                    Console.WriteLine($"User {receiver} does not exist. Trade request cancelled");
+                                    break;
+                              }
+                              // Console.Clear();
                               Console.WriteLine("===== Create Trade Request =====");
                               Console.WriteLine("Your items: ");
                               foreach (Item i in items)
@@ -155,16 +170,37 @@ while (running)
                               Console.WriteLine("Enter the name of the item [YOU] wanna offer: ");
                               string offered_item_input = Console.ReadLine() ?? "";
                               List<string> offered_items = new List<string>();
+                              bool invalidTrade = false;
                               if (!string.IsNullOrWhiteSpace(offered_item_input))
                               {
                                     string[] splits = offered_item_input.Split(",");
                                     foreach (string split in splits)
                                     {
                                           string trimmed = split.Trim();
-                                          if (!string.IsNullOrEmpty(trimmed))
+                                          bool found = false;
+                                          foreach (Item i in items)
                                           {
-                                                offered_items.Add(trimmed);
+                                                if (i.OwnerUsername == ((Account)active_user).Username && i.Name == trimmed)
+                                                {
+
+                                                      if (!string.IsNullOrEmpty(trimmed))
+                                                      {
+                                                            found = true;
+                                                            offered_items.Add(trimmed);
+                                                            break;
+                                                      }
+                                                }
                                           }
+                                          if (!found)
+                                          {
+                                                Console.WriteLine($"Item {trimmed} wasnt found, please check spelling or if item exists");
+                                                invalidTrade = true;
+                                          }
+                                    }
+                                    if (invalidTrade)
+                                    {
+                                          Console.WriteLine("Trade request cancelled...");
+                                          break;
                                     }
                               }
                               //READ IN OFFER END
@@ -179,19 +215,40 @@ while (running)
                               }
                               //SHOW OTHER USERS ITEMS END
                               //READ IN ITEMS WANTED START
-                              Console.WriteLine("Enter the item name(s) you want for [USER], Separate with comma (,) or leave empty if none: ");
+                              Console.WriteLine("Enter the item name(s) you want from [USER], Separate with comma (,) or leave empty if none: ");
                               string wanted_item_input = Console.ReadLine() ?? "";
                               List<string> wanted_items = new List<string>();
                               if (!string.IsNullOrWhiteSpace(wanted_item_input))
                               {
+
                                     string[] splits = wanted_item_input.Split(",");
                                     foreach (string split in splits)
                                     {
                                           string trimmed = split.Trim();
+                                          bool found = false;
                                           if (!string.IsNullOrEmpty(trimmed))
                                           {
-                                                wanted_items.Add(trimmed);
+                                                foreach (Item i in items)
+                                                {
+                                                      if (i.OwnerUsername == receiver && i.Name == trimmed)
+                                                      {
+                                                            found = true;
+                                                            wanted_items.Add(trimmed);
+                                                            break;
+                                                      }
+                                                }
+                                                if (!found)
+                                                {
+                                                      Console.WriteLine($"Item {trimmed} wasnt found, please check spelling or if item exists");
+                                                      invalidTrade = true;
+                                                }
+
                                           }
+                                    }
+                                    if (invalidTrade)
+                                    {
+                                          Console.WriteLine("Trade request cancelled...");
+                                          break;
                                     }
                               }
                               //READ IN ITEMS WANTED END
@@ -294,7 +351,7 @@ while (running)
 // TODO
 // SÄTT ETT KRAV PÅ ATT ITEMS MÅSTE FINNAS ANNARS INVALID OPTION
 // KOMMENTERA KODEN
-// READ.ME
+// README.MD
 //
 //
 
