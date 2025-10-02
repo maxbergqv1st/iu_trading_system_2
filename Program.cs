@@ -81,7 +81,7 @@ while (running)
       {
             Console.Clear();
             Console.WriteLine("===== Logged in =====");
-            Console.WriteLine("[1] Upload\n[2] Browse\n[5] Logout");
+            Console.WriteLine("[1] Upload\n[2] Browse Trades\n[3] Trade Request\n[4] Trade History\n[5] Logout");
             string input = Console.ReadLine();
             if (int.TryParse(input, out int choice))
             {
@@ -115,6 +115,12 @@ while (running)
                                     }
                               }
                               
+                              break;
+                        case LoggedInMenu.TradeRequest:
+                              Console.WriteLine("trading request");
+                              break;
+                        case LoggedInMenu.TradeHistory:
+                              Console.WriteLine("trading history");
                               break;
                         case LoggedInMenu.Logout:
                               active_user = null;
