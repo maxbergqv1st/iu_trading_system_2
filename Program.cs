@@ -1,47 +1,47 @@
 ﻿using App;
 
-SaveUserSystem save_user_system = new SaveUserSystem();
-List<IUser> users = save_user_system.LoadUser();
+SaveUserSystem save_user_system = new SaveUserSystem(); // Skapar ett nytt objekt av SaveUserSystem.
+List<IUser> users = save_user_system.LoadUser(); // Laddar users till en lista från users.txt. 
 
-SaveItemSystem save_item_system = new SaveItemSystem();
-List<Item> items = save_item_system.LoadItems();
+SaveItemSystem save_item_system = new SaveItemSystem(); // Skapar ett nytt objekt av SaveItemSystem.
+List<Item> items = save_item_system.LoadItems(); // Laddar items till en lista från items.txt.
 
-SaveTradeSystem save_trade_system = new SaveTradeSystem();
-List<Trade> trades = save_trade_system.LoadTrades();
+SaveTradeSystem save_trade_system = new SaveTradeSystem(); // Skapar ett nytt objekt av SaveTradeSystem
+List<Trade> trades = save_trade_system.LoadTrades(); // Laddar trades till en lista från trades.txt
 
-IUser? active_user = null;
-bool running = true;
+IUser active_user = null; // När active_user är null
+bool running = true; // När running är true kör while loopen. false. while loopen körs inte. 
 
-InputHelper helper = new InputHelper();
+InputHelper helper = new InputHelper(); // Kollar input och sätter regel för att strängen inte får vara tom. 
 
-while (running)
+while (running) // = true.
 {
-      if (active_user == null)
+      if (active_user == null) // active_user är null från början. därför körs detta scoopet först.
       {
             Console.Clear();
-            Console.WriteLine("[1] login\n[2] register\n[3] quit\nChoose a index to move around [X]");
+            Console.WriteLine("[1] login\n[2] register\n[3] quit\nWrite a index to move around [X]");
             string? input = Console.ReadLine();
-            if (int.TryParse(input, out int choice))
+            if (int.TryParse(input, out int choice)) // Kollar om input går att konvertera till en int. 
             {
                   Console.Clear();
-                  switch ((MainMenu)choice)
+                  switch ((MainMenu)choice) // Switchen använder min enum MainMenu.choice om den inte hittar caset körs default.
                   {
                         case MainMenu.Login:
                               Console.WriteLine("===== Login =====");
-                              string login_username = helper.ReadRequired("Username: ");
+                              string login_username = helper.ReadRequired("Username: "); // helper.ReadRequired tillåter inte en tom sträng.
                               string login_password = helper.ReadRequired("Password: ");
-                              bool found = false;
-                              foreach (Account acc in users)
+                              bool found = false; // found false innan vi kollar om username finns. 
+                              foreach (Account acc in users) // foreach loopar genom alla Account in users.
                               {
-                                    if (acc.Username == login_username && acc._password == login_password)
+                                    if (acc.Username == login_username && acc._password == login_password) // Kollar om Username är likamed login_username input, samma med password.
                                     {
-                                          active_user = acc;
+                                          active_user = acc; // Scoopet har hittat en users som matchar input. sätter active_user till funnen user.
                                           Console.WriteLine("Signing in...");
-                                          found = true;
+                                          found = true; // Boolen found sätts till true. 
                                           break;
                                     }
                               }
-                              if (!found)
+                              if (!found) // Om inte found kör detta.
                               {
                                     Console.WriteLine("User not found...");
                               }
@@ -123,52 +123,51 @@ while (running)
                               break;
                         case LoggedInMenu.TradeRequest:
                               Console.WriteLine("===== Create Trade Request =====");
-                              if (items.Count == 0)
+                              if (items.Count == 0) // Om det inte finns några item listade.
                               {
-                                    Console.WriteLine("no items listed");
+                                    Console.WriteLine("no items listed"); 
                               }
-                              else
+                              else // Om items finns. 
                               {
-                                    int index = 1;
-                                    foreach (Item i in items)
+                                    int index = 1; // En index för alla items till foreach loopen.
+                                    foreach (Item i in items) // 
                                     {
-                                          if (i.OwnerUsername != ((Account)active_user).Username)
-                                          {
+                                          if (i.OwnerUsername != ((Account)active_user).Username) // Kollar om Item Owner inte är samma med active_user. 
+                                          {                                                       // för att inte visa mina egna items som är listade.
                                                 Console.WriteLine($"[{index}] Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
-                                                index++;
+                                                index++; // Plusar index för varje item i items. 
                                           }
                                     }
                               }
                               //ovanf;r 'r tradebrowse igen
-                              string receiver = helper.ReadRequired("Enter the username of the user you wanna trade with: ");
-                              bool ReceiverExists = false;
-                              foreach (Account acc in users)
+                              string receiver = helper.ReadRequired("Enter the username of the user you wanna trade with: "); // Skriv Usernamnet på hen du vill tradea. 
+                              bool ReceiverExists = false; // Satt till  vi inte hittat en Username som vill tradea.
+                              foreach (Account acc in users) // Loopar genom alla users. 
                               {
-                                    if (acc.Username == receiver)
+                                    if (acc.Username == receiver) // Username är samma som input receiver.
                                     {
-                                          ReceiverExists = true;
+                                          ReceiverExists = true; // Sätter den till true, för scoopet är för kolla så det finns en user. 
                                           break;
                                     }
                               }
-                              if (!ReceiverExists)
+                              if (!ReceiverExists) // Om inte ReceiverExists.
                               {
-                                    ReceiverExists = false;
+                                    ReceiverExists = false; // sätter den till false.
                                     Console.WriteLine($"User {receiver} does not exist. Trade request cancelled");
-                                    break;
+                                    break; // Breakar.
                               }
                               // Console.Clear();
                               Console.WriteLine("===== Create Trade Request =====");
                               Console.WriteLine("Your items: ");
-                              foreach (Item i in items)
+                              foreach (Item i in items) // Loopar genom mina items. 
                               {
-                                    if (i.OwnerUsername == ((Account)active_user).Username)
+                                    if (i.OwnerUsername == ((Account)active_user).Username) // Kollar så active_user är owner.
                                     {
-                                          Console.WriteLine($" - {i.Name}");
+                                          Console.WriteLine($" - {i.Name}"); 
                                     }
                               }
-                              //READ IN OFFER START
                               Console.WriteLine("Enter the name of the item [YOU] wanna offer: ");
-                              string offered_item_input = Console.ReadLine() ?? "";
+                              string offered_item_input = Console.ReadLine() ?? ""; // Tillåter 
                               List<string> offered_items = new List<string>();
                               bool invalidTrade = false;
                               if (!string.IsNullOrWhiteSpace(offered_item_input))
@@ -352,7 +351,7 @@ while (running)
 // SÄTT ETT KRAV PÅ ATT ITEMS MÅSTE FINNAS ANNARS INVALID OPTION
 // KOMMENTERA KODEN
 // README.MD
-//
+// SÄTTS ITEMS EFTER TRADE TILL TRADEABLE FALSE. HUR SÄTTER JAG DEM TILL TRADABLE IGEN. BROWSE BÖR VARA FÖR EGNA ITEMS. 
 //
 
 // A user needs to be able to register an account DONE
