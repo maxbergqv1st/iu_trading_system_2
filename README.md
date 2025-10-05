@@ -3,7 +3,7 @@
 # Usings
 
 - Registrera dig och logga in för att att kolla om det finns någon som vill tradea med dig xD.
-- För att röra dig runt i programet är tydligt och kräven ENTER efter valet i [x] skrivits.
+- Röra dig runt i programet med hjälp av de olika [meny] valen när ni kör programmet
 - För att logga in och Accepta trades man gör med Username hasse1337 eller madmax. Har båda lösenordet: pass
 
 # Funtioner
@@ -24,3 +24,9 @@
 - Jag har använt mig av [INTERFACE] till IUser då jag vet att account ska ärva en gemensam struktur och kontrakt för att logga in.
 - [POLYMORPHISM] kan möjliggöra framtida användare som t.ex. admin osv. Metoden "TryLogin" kan implementeras olika men kallas på samma sätt och på så sätt minimera kod.
 - [Composition] har jag använt för att jag kunnat strukturera mina olika data nersparings-modeller till (Databasen/txt) och enkelt förstått när jag ska använda dom i mitt Program.cs
+
+# FAQ
+
+- Tryck [ENTER] efter input.
+- Username: hasse1337 lösenord: pass
+- Username: madmax lösenord: pass
