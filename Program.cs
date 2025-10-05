@@ -4,14 +4,14 @@ using Microsoft.VisualBasic;
 SaveUserSystem save_user_system = new SaveUserSystem(); // Skapar ett nytt objekt av SaveUserSystem.
 List<IUser> users = save_user_system.LoadUser(); // Laddar users till en lista från users.txt. 
 
-SaveItemSystem save_item_system = new SaveItemSystem(); // Skapar ett nytt objekt av SaveItemSystem.
-List<Item> items = save_item_system.LoadItems(); // Laddar items till en lista från items.txt.
+SaveItemSystem save_item_system = new SaveItemSystem();
+List<Item> items = save_item_system.LoadItems(); 
 
-SaveTradeSystem save_trade_system = new SaveTradeSystem(); // Skapar ett nytt objekt av SaveTradeSystem
-List<Trade> trades = save_trade_system.LoadTrades(); // Laddar trades till en lista från trades.txt
+SaveTradeSystem save_trade_system = new SaveTradeSystem(); 
+List<Trade> trades = save_trade_system.LoadTrades(); 
 
 IUser active_user = null; // När active_user är null
-bool running = true; // När running är true kör while loopen. false. while loopen körs inte. 
+bool running = true; // När running är true kör while loopen. 
 
 InputHelper helper = new InputHelper(); // Kollar input och sätter regel för att strängen inte får vara tom. 
 
@@ -120,7 +120,6 @@ while (running) // = true.
                                           }
                                     }
                               }
-                              
                               break;
                         case LoggedInMenu.TradeRequest:
                               Console.WriteLine("===== Create Trade Request =====");
@@ -134,30 +133,28 @@ while (running) // = true.
                                     foreach (Item i in items) // 
                                     {
                                           if (i.OwnerUsername != ((Account)active_user).Username) // Kollar om Item Owner inte är samma med active_user. 
-                                          {                                                       // för att inte visa mina egna items som är listade.
+                                          {                                                       // för att jag vill inte kunna tradea requesta mig själv.
                                                 Console.WriteLine($"[{index}] Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
-                                                index++; // Plusar index för varje item i items. 
+                                                index++; //  ++index för varje item i items. 
                                           }
                                     }
                               }
-                              //ovanf;r 'r tradebrowse igen
-                              string receiver = helper.ReadRequired("Enter the username of the user you wanna trade with: "); // Skriv Usernamnet på hen du vill tradea. 
-                              bool ReceiverExists = false; // Satt till  vi inte hittat en Username som vill tradea.
+                              string receiver = helper.ReadRequired("Enter the username of the user you wanna trade with: "); // Skriv Usernamnet på usern du vill tradea. 
+                              bool ReceiverExists = false; // Satt till vi inte hittat en Username som vill tradea med.
                               foreach (Account acc in users) // Loopar genom alla users. 
                               {
                                     if (acc.Username == receiver) // Username är samma som input receiver.
                                     {
-                                          ReceiverExists = true; // Sätter den till true, för scoopet är för kolla så det finns en user. 
-                                          break;
+                                          ReceiverExists = true; // Sätter den till true, för vi hittat en user.. 
+                                          break; //Avslutar scoopet.
                                     }
                               }
                               if (!ReceiverExists) // Om inte ReceiverExists.
                               {
-                                    ReceiverExists = false; // sätter den till false.
+                                    // ReceiverExists = false; // behåller den false. // Hade denna innan men kommentera ut den nu för tror inte den behövs. Eftersom jag inte gör någon ändring på värdet blir den onödig.
                                     Console.WriteLine($"User {receiver} does not exist. Trade request cancelled");
                                     break; // Breakar.
                               }
-                              // Console.Clear();
                               Console.WriteLine("===== Create Trade Request =====");
                               Console.WriteLine("Your items: ");
                               foreach (Item i in items) // Loopar genom mina items. 
@@ -168,10 +165,10 @@ while (running) // = true.
                                     }
                               }
                               Console.WriteLine("Enter the name of the item [YOU] wanna offer: ");
-                              string offered_item_input = Console.ReadLine() ?? ""; // Tillåter tom sträng som offered item.
+                              string offered_item_input = Console.ReadLine() ?? ""; // Tillåter tom sträng som offered_items.
                               List<string> offered_items = new List<string>(); // Skapar en lista av offered items. 
-                              bool invalidTrade = false; // skapar en bool för invalid Trade. Sätter den till false för änsålänge är det en godkänd trade.
-                              if (!string.IsNullOrWhiteSpace(offered_item_input)) // Kollar om användaren INTE skrev ett tom sträng, null eller space.
+                              bool invalidTrade = false; // skapar en bool för invalid Trade. 
+                              if (!string.IsNullOrWhiteSpace(offered_item_input)) // Kollar om användaren INTE skrev en tom sträng, null eller space.
                               {
                                     string[] splits = offered_item_input.Split(","); // Delar upp vid , om det är flera items.
                                     foreach (string split in splits) // Loopar alla items usern skrev. 
