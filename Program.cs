@@ -1,4 +1,5 @@
 ﻿using App;
+using Microsoft.VisualBasic;
 
 SaveUserSystem save_user_system = new SaveUserSystem(); // Skapar ett nytt objekt av SaveUserSystem.
 List<IUser> users = save_user_system.LoadUser(); // Laddar users till en lista från users.txt. 
@@ -48,35 +49,35 @@ while (running) // = true.
                               break;
                         case MainMenu.Register:
                               Console.WriteLine("===== Register =====");
-                              string name = helper.ReadRequired("Name: ");
+                              string name = helper.ReadRequired("Name: "); //kör min helper.ReadReqquired där jag inte vill ha några tomma strängar som alternativ. 
                               string username = helper.ReadRequired("Username: ");
                               string password = helper.ReadRequired("Password: ");
-                              bool exists = false;
-                              foreach (Account acc in users)
+                              bool exists = false; // Sätter exists till false. 
+                              foreach (Account acc in users) // Kollar genom alla users. 
                               {
-                                    if (acc.Username == username)
+                                    if (acc.Username == username) // Om input username hittas i users, sätter exists till true och breakar. 
                                     {
-                                          exists = true;
+                                          exists = true; 
                                           break;
                                     }
                               }
-                              if (exists)
+                              if (exists) // Kollar sen om exists är true. 
                               {
-                                    Console.WriteLine("Username already exists");
+                                    Console.WriteLine("Username already exists"); 
                               }
-                              else
+                              else // Om !exists (INTE) Skapa users. 
                               {
                                     users.Add(new Account(name, username, password));
-                                    save_user_system.SaveUser(users);
+                                    save_user_system.SaveUser(users); //Sparar users. SaveUsers till users.txt. 
                                     Console.WriteLine("Account successfully created and saved!");
                               }
                               break;
                         case MainMenu.Quit:
                               Console.WriteLine("===== Quiting =====");
-                              running = false;
+                              running = false; // stänger av while loopen till programet. 
                               break;
                         default:
-                              Console.WriteLine("Unvalid choice...");
+                              Console.WriteLine("Unvalid choice..."); // defaultar alla icke inputs som inte leder nånstans.
                               break;
                   }
                   Console.ReadLine();
@@ -95,27 +96,27 @@ while (running) // = true.
                   {
                         case LoggedInMenu.Upload:
                               Console.WriteLine("===== Upload =====");
-                              string item_name = helper.ReadRequired("Item name: ");
+                              string item_name = helper.ReadRequired("Item name: "); // Tillåter inte en tom sträng.
                               string item_description = helper.ReadRequired("Item description: ");
-                              items.Add(new Item(((Account)active_user).Username, item_name, item_description));
-                              save_item_system.SaveItem(items);
+                              items.Add(new Item(((Account)active_user).Username, item_name, item_description)); //Lägger till ett item. Där accountet som är inloggat(active_user) Username.
+                              save_item_system.SaveItem(items); // Sparar items till items.txt.
                               Console.WriteLine("Item uploaded and saved!");
                               break;
                         case LoggedInMenu.Browse:
                               Console.WriteLine("===== Browse Other Users Items =====");
-                              if (items.Count == 0)
+                              if (items.Count == 0) // Om inga items finns tillgängliga. 
                               {
-                                    Console.WriteLine("no items listed");
+                                    Console.WriteLine("no items listed"); 
                               }
                               else
                               {
-                                    int index = 1;
+                                    int index = 1; // Sätter en index för att displaya varje item.
                                     foreach (Item i in items)
                                     {
                                           if (i.OwnerUsername != ((Account)active_user).Username)
                                           {
                                                 Console.WriteLine($"[{index}] Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
-                                                index++;
+                                                index++; // Plussar index för varje item.
                                           }
                                     }
                               }
@@ -167,95 +168,91 @@ while (running) // = true.
                                     }
                               }
                               Console.WriteLine("Enter the name of the item [YOU] wanna offer: ");
-                              string offered_item_input = Console.ReadLine() ?? ""; // Tillåter 
-                              List<string> offered_items = new List<string>();
-                              bool invalidTrade = false;
-                              if (!string.IsNullOrWhiteSpace(offered_item_input))
+                              string offered_item_input = Console.ReadLine() ?? ""; // Tillåter tom sträng som offered item.
+                              List<string> offered_items = new List<string>(); // Skapar en lista av offered items. 
+                              bool invalidTrade = false; // skapar en bool för invalid Trade. Sätter den till false för änsålänge är det en godkänd trade.
+                              if (!string.IsNullOrWhiteSpace(offered_item_input)) // Kollar om användaren INTE skrev ett tom sträng, null eller space.
                               {
-                                    string[] splits = offered_item_input.Split(",");
-                                    foreach (string split in splits)
+                                    string[] splits = offered_item_input.Split(","); // Delar upp vid , om det är flera items.
+                                    foreach (string split in splits) // Loopar alla items usern skrev. 
                                     {
-                                          string trimmed = split.Trim();
-                                          bool found = false;
-                                          foreach (Item i in items)
+                                          string trimmed = split.Trim(); // Tar bort eventuella mellanslag för varje item om det behövs.
+                                          bool found = false; // item inte hittat än.
+                                          foreach (Item i in items) //Loopar alla item items.
                                           {
-                                                if (i.OwnerUsername == ((Account)active_user).Username && i.Name == trimmed)
+                                                if (i.OwnerUsername == ((Account)active_user).Username && i.Name == trimmed) // Kollar om item tillhör användaren och om namnet matchar input.
                                                 {
 
-                                                      if (!string.IsNullOrEmpty(trimmed))
+                                                      if (!string.IsNullOrEmpty(trimmed)) // Säkerställer att namnet inte är tomt. 
                                                       {
-                                                            found = true;
-                                                            offered_items.Add(trimmed);
-                                                            break;
+                                                            found = true; // Sätter item som hittat.
+                                                            offered_items.Add(trimmed); // Lägger till item/items till offered_items.
+                                                            break; //Avbryter loopen då item är hittat.
                                                       }
                                                 }
                                           }
-                                          if (!found)
+                                          if (!found) // Om inte item är hittat kör detta.
                                           {
                                                 Console.WriteLine($"Item {trimmed} wasnt found, please check spelling or if item exists");
-                                                invalidTrade = true;
+                                                invalidTrade = true; //invalidTrade blir true. 
                                           }
                                     }
-                                    if (invalidTrade)
+                                    if (invalidTrade)//Eftersom invalid trade blir true i !found.
                                     {
                                           Console.WriteLine("Trade request cancelled...");
-                                          break;
+                                          break; // Avbryt loopen utan att skapa en trade/ offer. 
                                     }
                               }
-                              //READ IN OFFER END
-                              //SHOW OTHER USERS ITEMS START
                               Console.WriteLine($"Items owned by {receiver}:");
-                              foreach (Item i in items)
+                              foreach (Item i in items) // Loopar alla items.
                               {
-                                    if (i.OwnerUsername == receiver)
+                                    if (i.OwnerUsername == receiver) // Kollar om itemets owner stämmer överense med input namnet för receiver
                                     {
-                                          Console.WriteLine($" - {i.Name}");
+                                          Console.WriteLine($" - {i.Name}"); // Loggar alla items som matchar receiver.
                                     }
                               }
-                              //SHOW OTHER USERS ITEMS END
-                              //READ IN ITEMS WANTED START
                               Console.WriteLine("Enter the item name(s) you want from [USER], Separate with comma (,) or leave empty if none: ");
                               string wanted_item_input = Console.ReadLine() ?? "";
-                              List<string> wanted_items = new List<string>();
-                              if (!string.IsNullOrWhiteSpace(wanted_item_input))
+                              List<string> wanted_items = new List<string>(); // Skapar en lista av wanted_items.
+                              if (!string.IsNullOrWhiteSpace(wanted_item_input)) // Kollar om användaren INTE skrev ett tom sträng, null eller space.
                               {
-
-                                    string[] splits = wanted_item_input.Split(",");
-                                    foreach (string split in splits)
+                                    string[] splits = wanted_item_input.Split(","); // Delar upp vid , om det är flera items.
+                                    foreach (string split in splits) // Loopar alla items usern skrev.
                                     {
-                                          string trimmed = split.Trim();
-                                          bool found = false;
-                                          if (!string.IsNullOrEmpty(trimmed))
+                                          string trimmed = split.Trim(); // Tar bort eventuella mellanslag för varje item om det behövs.
+                                          bool found = false; // Found är false.
+                                          if (!string.IsNullOrEmpty(trimmed)) // Om itemet inte är tomt, fortsätt.
                                           {
-                                                foreach (Item i in items)
+                                                foreach (Item i in items) // Loopar alla items.
                                                 {
-                                                      if (i.OwnerUsername == receiver && i.Name == trimmed)
+                                                      if (i.OwnerUsername == receiver && i.Name == trimmed)  // Kollar om itemet ägs av mottagaren och är rätt namn.
                                                       {
-                                                            found = true;
-                                                            wanted_items.Add(trimmed);
-                                                            break;
+                                                            found = true; // Sätter found till true då item existerar.
+                                                            wanted_items.Add(trimmed); // Lägger till itemet i listan wanted items.
+                                                            break; // Avslutar loopen då item är hittat och sparat.
                                                       }
                                                 }
-                                                if (!found)
+                                                if (!found) // Om inte hittat.
                                                 {
                                                       Console.WriteLine($"Item {trimmed} wasnt found, please check spelling or if item exists");
-                                                      invalidTrade = true;
+                                                      invalidTrade = true; // Sätter invalidTrade till true.
                                                 }
 
                                           }
                                     }
-                                    if (invalidTrade)
+                                    if (invalidTrade) //invalidTrade är true
                                     {
-                                          Console.WriteLine("Trade request cancelled...");
-                                          break;
+                                          Console.WriteLine("Trade request cancelled..."); 
+                                          break; // Avbryt loopen och trade/offer är avbrutet.
                                     }
                               }
-                              //READ IN ITEMS WANTED END
+                              
                               Trade new_trade = new Trade(((Account)active_user).Username, receiver, offered_items, wanted_items);
-                              trades.Add(new_trade);
-                              save_trade_system.SaveTrades(trades);
+                              //Skapar en trade om alla kraven lyckats och !found blir true och invalidTrade hålls false under hela loopen.
+                              trades.Add(new_trade); // Lägger till traden i listan.
+                              save_trade_system.SaveTrades(trades); // Sparar traden till trades.txt. (Lokala databasen)
                               Console.WriteLine("Trade request created and saved!");
-                              break;
+                              break; // Avslutar casen.
                         case LoggedInMenu.TradePending:
                               Console.WriteLine("===== Pending Trade Requests =====");
 
