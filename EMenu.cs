@@ -1,5 +1,5 @@
 namespace App;
-//Mina Enums val. 
+//Mina Enums. 
 public enum MainMenu
 {
       Login = 1,

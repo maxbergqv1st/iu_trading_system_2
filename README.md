@@ -22,5 +22,5 @@
 # Varför
 
 - Jag har använt mig av [INTERFACE] till IUser då jag vet att account ska ärva en gemensam struktur och kontrakt för att logga in.
-- Det gör också att [POLYMORPHISM] kan möjliggöra framtida användare som t.ex. admin osv. Metoden "TryLogin" kan implementeras olika men kallas på samma sätt och på så sätt minimera kod.
-- Trade innehåller listor av items som egna objekt. Systemet använder [Composition]
+- [POLYMORPHISM] kan möjliggöra framtida användare som t.ex. admin osv. Metoden "TryLogin" kan implementeras olika men kallas på samma sätt och på så sätt minimera kod.
+- [Composition] har jag använt för att jag kunnat strukturera mina olika data nersparings-modeller till (Databasen/txt) och enkelt förstått när jag ska använda dom i mitt Program.cs
