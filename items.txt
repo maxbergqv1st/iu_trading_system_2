@@ -1,3 +1,4 @@
-max,TV,big
-hasse,Snus,big
-max,Computer,big
+max,TV,samsung
+Potta,Snus,Go lös snus
+max,Laptop,msi modern 14
+

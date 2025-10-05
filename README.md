@@ -1,10 +1,10 @@
 # IU Trading System 2
 
-varför!
+# Usings
 
-Inheritance
-Composition
-Polymorphism
+- Registrera dig och logga in för att att kolla om det finns någon som vill tradea med dig xD.
+- För att röra dig runt i programet är tydligt och kräven ENTER efter valet i [x] skrivits.
+- För att logga in och Accepta trades man gör med Username hasse1337 eller madmax. Har båda lösenordet: pass
 
 # Funtioner
 

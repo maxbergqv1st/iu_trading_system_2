@@ -1,2 +1,3 @@
-Max,max,pass
-Hasse,hasse,pass
+Max,madmax,pass
+Hasse,hasse1337,pass
+
