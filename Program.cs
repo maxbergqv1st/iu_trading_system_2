@@ -256,118 +256,90 @@ while (running) // = true.
                         case LoggedInMenu.TradePending:
                               Console.WriteLine("===== Pending Trade Requests =====");
 
-                              List<Trade> pending_trades = new List<Trade>();
-                              int index_of_item = 1;
-                              foreach (Trade t in trades)
+                              List<Trade> pending_trades = new List<Trade>(); // Skapar en lista av pending trades.
+                              int index_of_item = 1; // Lägger en index för loopa alla objekt i en lista.
+                              foreach (Trade t in trades) // Loopar alla trades.
                               {
-                                    if (t.Receiver == ((Account)active_user).Username && t.Status == TradeStatus.Pending)
-                                    {
+                                    if (t.Receiver == ((Account)active_user).Username && t.Status == TradeStatus.Pending) // Om receiver är samma som active_user och status är pending.
+                                    { // Loopa allt som matchar.
                                           Console.WriteLine($"[{index_of_item}] From: {t.Sender}, Offers: {string.Join(", ", t.SenderItems)} | Wants: {string.Join(", ", t.ReceiverItems)}");
-                                          pending_trades.Add(t);
-                                          index_of_item++;
+                                          pending_trades.Add(t); //Lägger till trade i listan pending_trades.
+                                          index_of_item++; // Plussar index för varje varv.
                                     }
                               }
                               Console.Write("Choose a trade number (or 0 to cancel): ");
                               string input_trade = Console.ReadLine();
-                              if (int.TryParse(input_trade, out int trade_choice) && trade_choice > 0 && trade_choice <= pending_trades.Count)
+                              if (int.TryParse(input_trade, out int trade_choice) && trade_choice > 0 && trade_choice <= pending_trades.Count) // Kollar om input är ett giltligt nummer av valmöjligheterna.
                               {
-                                    Trade chosen_trade = pending_trades[trade_choice - 1];
+                                    Trade chosen_trade = pending_trades[trade_choice - 1]; //Hämtar den valda traden. -1 för indexen som visas är plussade med 1. för att inte visa första itemet som 0.
                                     Console.WriteLine($"You selected trade from {chosen_trade.Sender}");
-                                    Console.WriteLine($" Sender offers: {string.Join(", ", chosen_trade.SenderItems)}");
+                                    Console.WriteLine($" Sender offers: {string.Join(", ", chosen_trade.SenderItems)}"); //Joinar om de är flera items med ett , och space mellan varje item.
                                     Console.WriteLine($" They offers: {string.Join(", ", chosen_trade.ReceiverItems)}");
-                                    //adda senders offers och vad de vill ha av dig
-                                    Console.WriteLine("[1] Accept  [2] Deny"); // kolla om helper.ReadReq funkar sen
+                                    //Visar detaljer om den valda traden.
+                                    Console.WriteLine("[1] Accept  [2] Deny");
                                     string input_decision = Console.ReadLine();
-                                    if (input_decision == "1")
+                                    if (input_decision == "1") // Om man väljer 1 (Accept) kör detta scoopet
                                     {
-                                          chosen_trade.Status = TradeStatus.Accepted;
+                                          chosen_trade.Status = TradeStatus.Accepted; //Statusen på traden sätts från pending till accepted.
                                           Console.WriteLine("Trade accepted!");
-                                          foreach (string itemName in chosen_trade.SenderItems)
+                                          foreach (string itemName in chosen_trade.SenderItems)// Loopar igenm alla items som sändaren erbjuder.
                                           {
-                                                foreach (Item i in items)
+                                                foreach (Item i in items) // Loopar alla items.
                                                 {
-                                                      if (i.Name == itemName && i.OwnerUsername == chosen_trade.Sender)
+                                                      if (i.Name == itemName && i.OwnerUsername == chosen_trade.Sender) //Kollar så att item matchar och ägs av sändaren.
                                                       {
-                                                            i.OwnerUsername = chosen_trade.Receiver;
+                                                            i.OwnerUsername = chosen_trade.Receiver; //Byter ägaren till mottagaren.
                                                       }
                                                 }
                                           }
 
-                                          foreach (string itemName in chosen_trade.ReceiverItems)
+                                          foreach (string itemName in chosen_trade.ReceiverItems) //Loopar alla items som mottagaren erbjuder.
                                           {
-                                                foreach (Item i in items)
+                                                foreach (Item i in items) // Loopar alla items.
                                                 {
-                                                      if (i.Name == itemName && i.OwnerUsername == chosen_trade.Receiver)
+                                                      if (i.Name == itemName && i.OwnerUsername == chosen_trade.Receiver) //Kollar så att item matchar och ägs av mottagaren.
                                                       {
-                                                            i.OwnerUsername = chosen_trade.Sender;
+                                                            i.OwnerUsername = chosen_trade.Sender; // Byter ögaren till sändaren.
                                                       }
                                                 }
                                           }
                                           
-                                          save_item_system.SaveItem(items);
+                                          save_item_system.SaveItem(items); //Sparar alla items efter man bytt ägare.
                                     }
-                                    else if (input_decision == "2")
+                                    else if (input_decision == "2") // Om man väljer 2 (Denied) kör detta scoopet
                                     {
-                                          chosen_trade.Status = TradeStatus.Denied;
+                                          chosen_trade.Status = TradeStatus.Denied; // Sätter trade till denied.
                                           Console.WriteLine("Trade denied.");
                                     }
-                                    save_trade_system.SaveTrades(trades);
+                                    save_trade_system.SaveTrades(trades); //Sparar trade statusen till denied.
                               }
-
-                              break;
+                              break; // Avslutar caset.
                         case LoggedInMenu.TradeHistory:
                               Console.WriteLine("===== Trading History =====");
-                              foreach (Trade t in trades)
+                              foreach (Trade t in trades) //Loopar alla trades.
                               {
                                     if ((t.Sender == ((Account)active_user).Username || t.Receiver == ((Account)active_user).Username) && t.Status != TradeStatus.Pending) //lägger prio ett i en (då de får högre prio) annars går && har högre prio ||. 
-                                    {
+                                    { // Kollar så att active_user är med i en trade som sändare eller mottagare. Och om traden inte är pending.
                                     Console.WriteLine($"Sender: {t.Sender} | Offered: [{string.Join(", ", t.SenderItems)}]  <---> Receiver: {t.Receiver} | Offered: {string.Join(", ", t.ReceiverItems)}, Status: {t.Status}");
-                                    }
+                                    } //Loopar allt som har de kraven.
                               }
                               Console.WriteLine("===== Pending Trades =====");
-                              foreach (Trade t in trades)
+                              foreach (Trade t in trades) // Gör samma fast kollar om trade statusen är pending.
                                     {
                                           if ((t.Sender == ((Account)active_user).Username || t.Receiver == ((Account)active_user).Username) && t.Status == TradeStatus.Pending) //lägger prio ett i en (då de får högre prio) annars går && har högre prio ||. 
                                           {
                                                 Console.WriteLine($"Sender: {t.Sender} | Offered: [{string.Join(", ", t.SenderItems)}]  <---> Receiver: {t.Receiver} | Offered: {string.Join(", ", t.ReceiverItems)}, Status: {t.Status}");
-                                          }
+                                          } // Loopar alla trades som frf är pending och man är mottagare eller sändare.
                                     }
-                              break;
+                              break; // Avslutar casen.
                         case LoggedInMenu.Logout:
-                              active_user = null;
+                              active_user = null; //Sätter active_user till null för att jag vill inte stänga ner programmet. Alltså är running frf true. 
                               Console.WriteLine("logging out...");
-                              break;
+                              break; //Avslutar casen. Hoppar tillbaka till MainMenu......
                   }
                   Console.ReadLine();
             }
             
       }
 }
-
-// TODO
-// SÄTT ETT KRAV PÅ ATT ITEMS MÅSTE FINNAS ANNARS INVALID OPTION
-// KOMMENTERA KODEN
-// README.MD
-// SÄTTS ITEMS EFTER TRADE TILL TRADEABLE FALSE. HUR SÄTTER JAG DEM TILL TRADABLE IGEN. BROWSE BÖR VARA FÖR EGNA ITEMS. 
-//
-
-// A user needs to be able to register an account DONE
-// A user needs to be able to log out. DONE
-// A user needs to be able to log in. DONE
-
-// A user needs to be able to upload information about the item they wish to trade. DONE
-// A user needs to be able to browse a list of other users items. DONE
-
-// A user needs to be able to request a trade for other users items. DONE
-// A user needs to be able to browse trade requests. DONE
-// A user needs to be able to accept a trade request. DONE
-// A user needs to be able to deny a trade request. DONE
-// A user needs to be able to browse completed requests. DONE
-
-// Additional Mandatory Features
-// In addition to the original features, we now need an automatic save and load system described by the following features:
-
-// The program needs to save relevant data to the computers file system whenever a state change is made. DONE
-// The program needs to be able to start and then automatically load all relevant data so it can function as if it was never closed. DONE
-
 
