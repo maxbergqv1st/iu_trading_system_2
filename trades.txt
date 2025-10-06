@@ -1,1 +1,4 @@
-
+madmax,hasse1337,,Snus,Accepted
+madmax,hasse1337,asd,,Accepted
+hasse1337,madmax,,,Denied
+hasse1337,madmax,Xbox ONE,TV,Accepted

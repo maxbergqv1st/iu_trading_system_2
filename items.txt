@@ -1,4 +1,6 @@
-max,TV,samsung
-Potta,Snus,Go lös snus
-max,Laptop,msi modern 14
-
+hasse1337,TV,Samsung,False
+madmax,Xbox ONE,3tb,False
+madmax,Snus,Göteborg XR,False
+madmax,iPhone 15 Pro Max, 256gb,True
+madmax,Soppa,Fransk fisk soppa,True
+madmax,Lössnus,General XR,False

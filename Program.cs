@@ -1,4 +1,5 @@
-﻿using App;
+﻿using System.Linq.Expressions;
+using App;
 
 SaveUserSystem save_user_system = new SaveUserSystem(); //Skapar ett nytt objekt av SaveUserSystem.
 List<IUser> users = save_user_system.LoadUser(); //Laddar users till en lista från users.txt. 
@@ -86,7 +87,7 @@ while (running) // = true.
       {
             Console.Clear();
             Console.WriteLine("===== Logged in =====");
-            Console.WriteLine("[1] Upload\n[2] Browse Trades\n[3] Trade Request\n[4] Trade Pending\n[5] Trade History\n[6] Sign Out");
+            Console.WriteLine("[1] Upload\n[2] Browse Your Listed And Unlisted Items \n[3] Trade Request\n[4] Trade Pending\n[5] Trade History\n[6] Sign Out");
             string input = Console.ReadLine();
             if (int.TryParse(input, out int choice))
             {
@@ -97,12 +98,13 @@ while (running) // = true.
                               Console.WriteLine("===== Upload =====");
                               string item_name = helper.ReadRequired("Item name: "); //Tillåter inte en tom sträng.
                               string item_description = helper.ReadRequired("Item description: ");
-                              items.Add(new Item(((Account)active_user).Username, item_name, item_description)); //Lägger till ett item. Där accountet som är inloggat(active_user) Username.
+                              bool tradeable = true;
+                              items.Add(new Item(((Account)active_user).Username, item_name, item_description, tradeable)); //Lägger till ett item. Där accountet som är inloggat(active_user) Username.
                               save_item_system.SaveItem(items); //Sparar items till items.txt.
                               Console.WriteLine("Item uploaded and saved!");
                               break;
                         case LoggedInMenu.Browse:
-                              Console.WriteLine("===== Browse Other Users Items =====");
+                              Console.WriteLine("===== My Listed Items =====\n");
                               if (items.Count == 0) //Om inga items finns tillgängliga. 
                               {
                                     Console.WriteLine("no items listed"); 
@@ -112,13 +114,60 @@ while (running) // = true.
                                     int index = 1; //Sätter en index för att displaya varje item.
                                     foreach (Item i in items)
                                     {
-                                          if (i.OwnerUsername != ((Account)active_user).Username)
+                                          if (i.OwnerUsername == ((Account)active_user).Username && i.Tradeable == true)
                                           {
                                                 Console.WriteLine($"[{index}] Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
                                                 index++; //Plussar index för varje item.
+                                                         //Kolla bara tradeable items. kunna sätta dem till true om dom är tradeable.
+                                                
                                           }
                                     }
                               }
+                              //test
+                              Console.WriteLine("\n===== My Unlisted Items =====\n");
+                              List<Item> Unlisted_Items = new List<Item>();
+                              foreach (Item i in items)
+                                    {
+                                          if (i.OwnerUsername == ((Account)active_user).Username && i.Tradeable == false)
+                                          {
+                                                Unlisted_Items.Add(i);
+                                          }
+                                    }
+                              if (Unlisted_Items.Count == 0)
+                              {
+                                    Console.WriteLine("No items unlisted...");
+                              }
+                              else
+                              {
+                                    for (int i = 0; i < Unlisted_Items.Count; ++i)
+                                    {
+                                          Console.WriteLine($"[{i + 1}] Item: {Unlisted_Items[i].Name} {Unlisted_Items[i].Tradeable}");
+                                    }
+                              }
+                              Console.WriteLine("\nWrite a index a item you wanna make listed for trade");
+                              string list_item_input = Console.ReadLine();
+                              if (!string.IsNullOrWhiteSpace(list_item_input))
+                              {
+                                    if (int.TryParse(list_item_input, out int list_item_choice))
+                                    {
+                                          if (list_item_choice <= Unlisted_Items.Count)
+                                          {
+                                                Item ChoosenItem = Unlisted_Items[list_item_choice - 1];
+                                                ChoosenItem.Tradeable = true;
+                                                Console.WriteLine($"{ChoosenItem.Name} is now listed for trades.");
+                                                save_item_system.SaveItem(items);
+                                          }
+                                          else
+                                          {
+                                                Console.WriteLine("No item on that index was found");
+                                          }
+                                    }
+                                    else
+                                    {
+                                          
+                                    }
+                              }
+                              //test
                               break;
                         case LoggedInMenu.TradeRequest:
                               Console.WriteLine("===== Create Trade Request =====");
@@ -128,13 +177,11 @@ while (running) // = true.
                               }
                               else //Om items finns. 
                               {
-                                    int index = 1; //En index för alla items till foreach loopen.
                                     foreach (Item i in items) // 
                                     {
-                                          if (i.OwnerUsername != ((Account)active_user).Username) //Kollar om Item Owner inte är samma med active_user. 
+                                          if (i.OwnerUsername != ((Account)active_user).Username && i.Tradeable == true) //Kollar om Item Owner inte är samma med active_user. 
                                           {                                                       //för att jag vill inte kunna tradea requesta mig själv.
-                                                Console.WriteLine($"[{index}] Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
-                                                index++; //++index för varje item i items. 
+                                                Console.WriteLine($"Owner: {i.OwnerUsername}  | Item: {i.Name} | Description {i.Description}");
                                           }
                                     }
                               }
@@ -158,12 +205,12 @@ while (running) // = true.
                               Console.WriteLine("Your items: ");
                               foreach (Item i in items) //Loopar genom mina items. 
                               {
-                                    if (i.OwnerUsername == ((Account)active_user).Username) //Kollar så active_user är owner.
+                                    if (i.OwnerUsername == ((Account)active_user).Username && i.Tradeable == true) //Kollar så active_user är owner.
                                     {
                                           Console.WriteLine($" - {i.Name}"); 
                                     }
                               }
-                              Console.WriteLine("Enter the name of the item [YOU] wanna offer: ");
+                              Console.WriteLine("Enter the name of the item [YOU] wanna offer. If more than one item separate with comma (,) or leave empty if none: ");
                               string offered_item_input = Console.ReadLine() ?? ""; //Tillåter tom sträng som offered_items.
                               List<string> offered_items = new List<string>(); //Skapar en lista av offered items. 
                               bool invalidTrade = false; //skapar en bool för invalid Trade. 
@@ -178,7 +225,6 @@ while (running) // = true.
                                           {
                                                 if (i.OwnerUsername == ((Account)active_user).Username && i.Name == trimmed) //Kollar om item tillhör användaren och om namnet matchar input.
                                                 {
-
                                                       if (!string.IsNullOrEmpty(trimmed)) // Säkerställer att namnet inte är tomt. 
                                                       {
                                                             found = true; //Sätter item som hittat.
@@ -202,7 +248,7 @@ while (running) // = true.
                               Console.WriteLine($"Items owned by {receiver}:");
                               foreach (Item i in items) //Loopar alla items.
                               {
-                                    if (i.OwnerUsername == receiver) //Kollar om itemets owner stämmer överense med input namnet för receiver
+                                    if (i.OwnerUsername == receiver && i.Tradeable == true) //Kollar om itemets owner stämmer överense med input namnet för receiver
                                     {
                                           Console.WriteLine($" - {i.Name}"); //Loggar alla items som matchar receiver.
                                     }
@@ -284,6 +330,7 @@ while (running) // = true.
                                                       if (i.Name == itemName && i.OwnerUsername == chosen_trade.Sender) //Kollar så att item matchar och ägs av sändaren.
                                                       {
                                                             i.OwnerUsername = chosen_trade.Receiver; //Byter ägaren till mottagaren.
+                                                            i.Tradeable = false;
                                                       }
                                                 }
                                           }
@@ -295,6 +342,7 @@ while (running) // = true.
                                                       if (i.Name == itemName && i.OwnerUsername == chosen_trade.Receiver) //Kollar så att item matchar och ägs av mottagaren.
                                                       {
                                                             i.OwnerUsername = chosen_trade.Sender; //Byter ögaren till sändaren.
+                                                            i.Tradeable = false;
                                                       }
                                                 }
                                           }
