@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using App;
+﻿using App;
 
 SaveUserSystem save_user_system = new SaveUserSystem(); //Skapar ett nytt objekt av SaveUserSystem.
 List<IUser> users = save_user_system.LoadUser(); //Laddar users till en lista från users.txt. 
